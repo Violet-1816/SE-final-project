@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #messages {
+            border: dotted 1px #444444;
+            font: 12px arial, sans-serif;
+        }
+
+        #messages>p {
+            padding: 0px;
+            margin: 0px;
+        }
+
+        button {
+            height: 100px;
+            width: 100px;
+            background: white;
+            border: solid;
+        }
+
+        button:hover {
+            background: #ddd;
+        }
+
+        .a {
+            color: red;
+            background: #fdd;
+        }
+
+        .b {
+            color: blue;
+            background: #ddf;
+        }
+    </style>
+
+    <script>
+        function log_msg(msg) {
+            console.log(msg);
+        }
+        var score = Array(25).fill(0);
+        var start = 0;
+        var s; //socket object for connection
+        function doInit() {
+            try {
+                let host = "ws://localhost:4545/"; //設定socker server的ip:port
+
+                s = new WebSocket(host); //建立socket元件
+                //設定幾個主要事件
+                s.onopen = function (e) {
+                    log_msg("connected...");
+                    nickname = document.getElementById('user').value;
+                    s.send("LOGIN###" + nickname)
+                };
+                s.onclose = function (e) { log_msg("connection closed."); };
+                s.onerror = function (e) { log_msg("connection error."); };
+
+                //當server送訊息來時
+                s.onmessage = function (e) {
+                    strs = e.data.split('###');
+                    if (strs[0] == 'start') {
+                        alert("Start!");
+                        start = 1;
+                        setTimeout(function () {
+                            score = Array(25).fill(0);
+                            start = 0;
+                            let a = document.getElementsByClassName('a').length;
+                            let b = document.getElementsByClassName('b').length;
+                            if (a > b){
+                                alert("a win!");
+                            }
+                            else if (a < b){
+                                alert("b win!");
+                            }
+                            else {
+                                alert("draw!");
+                            }
+                            s.send("END");
+                            document.querySelector("button").refresh();
+                        }, 30000);
+                    }
+                    else {
+                        if (strs[0] == '1')
+                            score[Number(strs[1]) - 1]++;
+                        else
+                            score[Number(strs[1]) - 1]--;
+                        show_score();
+                    }
+                    // log_msg(strs[0] + ":" + strs[1]);
+                };
+            } catch (ex) {
+                log_msg("connection exception:" + ex);
+            }
+        }
+        function sendClick(e) {
+            id = e.target.getAttribute("id");
+            s.send(id);
+        }
+        function show_score() {
+            for (i = 1; i <= 25; i++) {
+                let e = document.getElementById((i).toString());
+                if (score[i - 1] > 0) {
+                    e.className = "a";
+                    e.innerHTML = score[i - 1];
+                }
+                else if (score[i - 1] < 0) {
+                    e.className = "b";
+                    e.innerHTML = 0 - (score[i - 1]);
+                }
+                else {
+                    e.className = "none";
+                    e.innerHTML = 0;
+                }
+            }
+        }
+    </script>
+</head>
+
+<body>
+    Nickname:<input type="text" id="user">
+    <button onclick="doInit()">Connect</button>
+    <div id="messages"></div>
+    <div>
+        <button id="1" onclick="sendClick(event)">0</button>
+        <button id="2" onclick="sendClick(event)">0</button>
+        <button id="3" onclick="sendClick(event)">0</button>
+        <button id="4" onclick="sendClick(event)">0</button>
+        <button id="5" onclick="sendClick(event)">0</button>
+    </div>
+    <div>
+        <button id="6" onclick="sendClick(event)">0</button>
+        <button id="7" onclick="sendClick(event)">0</button>
+        <button id="8" onclick="sendClick(event)">0</button>
+        <button id="9" onclick="sendClick(event)">0</button>
+        <button id="10" onclick="sendClick(event)">0</button>
+    </div>
+    <div>
+        <button id="11" onclick="sendClick(event)">0</button>
+        <button id="12" onclick="sendClick(event)">0</button>
+        <button id="13" onclick="sendClick(event)">0</button>
+        <button id="14" onclick="sendClick(event)">0</button>
+        <button id="15" onclick="sendClick(event)">0</button>
+    </div>
+    <div>
+        <button id="16" onclick="sendClick(event)">0</button>
+        <button id="17" onclick="sendClick(event)">0</button>
+        <button id="18" onclick="sendClick(event)">0</button>
+        <button id="19" onclick="sendClick(event)">0</button>
+        <button id="20" onclick="sendClick(event)">0</button>
+    </div>
+    <div>
+        <button id="21" onclick="sendClick(event)">0</button>
+        <button id="22" onclick="sendClick(event)">0</button>
+        <button id="23" onclick="sendClick(event)">0</button>
+        <button id="24" onclick="sendClick(event)">0</button>
+        <button id="25" onclick="sendClick(event)">0</button>
+    </div>
+</body>
+
+</html>
