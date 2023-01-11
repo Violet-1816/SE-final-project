@@ -17,11 +17,14 @@
             margin: 0px;
         }
 
-        button.none  {
+        button {
             height: 100px;
             width: 100px;
-            background: white;
             border: solid;
+        }
+
+        button.none {
+            background: white;
         }
 
         button:hover {
@@ -71,10 +74,10 @@
                             start = 0;
                             let a = document.getElementsByClassName('a').length;
                             let b = document.getElementsByClassName('b').length;
-                            if (a > b){
+                            if (a > b) {
                                 alert("a win!");
                             }
-                            else if (a < b){
+                            else if (a < b) {
                                 alert("b win!");
                             }
                             else {
