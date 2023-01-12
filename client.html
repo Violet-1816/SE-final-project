@@ -7,16 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        #messages {
-            border: dotted 1px #444444;
-            font: 12px arial, sans-serif;
-        }
-
-        #messages>p {
-            padding: 0px;
-            margin: 0px;
-        }
-
         button {
             height: 100px;
             width: 100px;
@@ -84,15 +74,26 @@
                                 alert("draw!");
                             }
                             s.send("END");
-                            document.querySelector("button").refresh();
+                            let elementA = Array.from(document.getElementsByClassName('a'));
+                            elementA.forEach(e => {
+                                e.setAttribute('class', 'none');
+                                e.innerHTML = 0;
+                            })
+                            let elementB = Array.from(document.getElementsByClassName('b'));
+                            elementB.forEach(e => {
+                                e.setAttribute('class', 'none');
+                                e.innerHTML = 0;
+                            })
                         }, 30000);
                     }
                     else {
-                        if (strs[0] == '1')
-                            score[Number(strs[1]) - 1]++;
-                        else
-                            score[Number(strs[1]) - 1]--;
-                        show_score();
+                        if (start > 0) {
+                            if (strs[0] == '0')
+                                score[Number(strs[1]) - 1]++;
+                            else
+                                score[Number(strs[1]) - 1]--;
+                            show_score();
+                        }
                     }
                     // log_msg(strs[0] + ":" + strs[1]);
                 };

@@ -12,6 +12,7 @@ async def handler(websocket, path):
     userName = 'unknown'
     if websocket not in clients:
         clients.append(websocket)  # append new cleint to the array
+        print("connet",clients)
         if len(clients) == 2:
             await brocast("start")
 
@@ -36,12 +37,11 @@ async def handler(websocket, path):
             else:
                 await websocket.send('You can not do that')
         elif message == "END":
-            print("closed", clients)
-            for websocket in clients:
-                await websocket.close()
-            clients.clear()
+            print("closed", websocket)
+            await websocket.close()
+            clients.remove(websocket)
         else:
-            await brocast(userName+"###"+message)
+            await brocast(str(clients.index(websocket))+"###"+message)
 
 async def brocast(msg):
     print(msg, ' brocasting')  # print to console
