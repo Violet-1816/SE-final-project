@@ -90,8 +90,10 @@
                         if (start > 0) {
                             if (strs[0] == '0')
                                 score[Number(strs[1]) - 1]++;
-                            else
+                            else if (strs[0] == '1')
                                 score[Number(strs[1]) - 1]--;
+                            else
+                                alert("you are not player.")
                             show_score();
                         }
                     }
