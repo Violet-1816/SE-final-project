@@ -22,6 +22,7 @@ async def handler(websocket, path):
         if msg[0] == 'LOGIN':
             userName = msg[1]
             print("set client name,", userName)
+            print(clients)
         elif message == 'GET':
             print("GET", lockSign)
             if lockSign > 0:

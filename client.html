@@ -43,14 +43,18 @@
             try {
                 let host = "ws://localhost:4545/"; //設定socker server的ip:port
 
-                s = new WebSocket(host); //建立socket元件
+                if (s == null)
+                    s = new WebSocket(host); //建立socket元件
                 //設定幾個主要事件
                 s.onopen = function (e) {
                     log_msg("connected...");
                     nickname = document.getElementById('user').value;
                     s.send("LOGIN###" + nickname)
                 };
-                s.onclose = function (e) { log_msg("connection closed."); };
+                s.onclose = function (e) { 
+                    log_msg("connection closed.");
+                    s = null;
+                };
                 s.onerror = function (e) { log_msg("connection error."); };
 
                 //當server送訊息來時
